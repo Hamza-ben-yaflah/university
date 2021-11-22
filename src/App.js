@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import Card from "./components/card/Card";
 
 function App() {
+  const [universitie, setUnversite] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch("http://universities.hipolabs.com/search?country=United+States")
+      .then((response) => response.json())
+      .then((data) => setUnversite(data))
+      .catch((error) => setError(error));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      {universitie && universitie.map((univer) => <Card univer={univer} />)}
+      {error && setError(error)}
     </div>
   );
 }
